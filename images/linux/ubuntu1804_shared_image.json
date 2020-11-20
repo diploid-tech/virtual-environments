@@ -18,10 +18,12 @@
         "helper_script_folder": "/imagegeneration/helpers",
         "vm_size": "Standard_DS2_v2",
         "capture_name_prefix": "packer",
-        "image_version": "dev",
+        "image_version": "1.0.0",
         "image_os": "ubuntu18",
         "github_feed_token": null,
-        "run_validation_diskspace": "false"
+        "run_validation_diskspace": "false",
+        "managed_image_name": "{{env `GALLERY_IMAGE_DEFINITION`}}",
+        "gallery_name": "{{env `GALLERY_NAME`}}"
     },
     "sensitive-variables": [
         "client_secret",
@@ -36,11 +38,7 @@
             "tenant_id": "{{user `tenant_id`}}",
             "location": "{{user `location`}}",
             "vm_size": "{{user `vm_size`}}",
-            "resource_group_name": "{{user `resource_group`}}",
-            "storage_account": "{{user `storage_account`}}",
             "temp_resource_group_name": "{{user `temp_resource_group_name`}}",
-            "capture_container_name": "images",
-            "capture_name_prefix": "{{user `capture_name_prefix`}}",
             "virtual_network_name": "{{user `virtual_network_name`}}",
             "virtual_network_resource_group_name": "{{user `virtual_network_resource_group_name`}}",
             "virtual_network_subnet_name": "{{user `virtual_network_subnet_name`}}",
@@ -49,7 +47,18 @@
             "image_publisher": "Canonical",
             "image_offer": "UbuntuServer",
             "image_sku": "18.04-LTS",
-            "os_disk_size_gb": "86"
+            "os_disk_size_gb": "86",
+            "managed_image_name": "{{user `managed_image_name`}}-{{user `image_version`}}",
+            "managed_image_resource_group_name": "{{user `resource_group`}}",
+            "shared_image_gallery_destination": {
+                "resource_group": "{{user `resource_group`}}",
+                "gallery_name": "{{user `gallery_name`}}",
+                "image_name": "{{user `managed_image_name`}}",
+                "image_version": "{{user `image_version`}}",
+                "replication_regions": [
+                    "{{user `location`}}"
+                ]
+            }
         }
     ],
     "provisioners": [
