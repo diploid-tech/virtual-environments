@@ -135,17 +135,10 @@
     },
     "docker": {
         "images": [
-            "alpine:3.9",
             "alpine:3.10",
             "buildpack-deps:stretch",
-            "buildpack-deps:buster",
-            "debian:8",
             "debian:9",
-            "jekyll/builder",
-            "mcr.microsoft.com/azure-pipelines/node8-typescript",
-            "node:12",
-            "node:12-alpine",
-            "ubuntu:14.04"
+            "mcr.microsoft.com/azure-pipelines/node8-typescript"
         ]
     },
     "pipx": [
