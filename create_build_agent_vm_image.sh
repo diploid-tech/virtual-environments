@@ -126,7 +126,7 @@ echo "Generate image using Packer"
         -var gallery_name=$shared_image_gallery_name \
         -var managed_image_name=$shared_image_definition \
         -var github_feed_token=$github_feed_token \
-        /tmp/images/linux/ubuntu1804_shared_image.json
+        /tmp/images/linux/ubuntu1804_customized.json
 )
 
 echo "Deleting Azure service principal with id $azAppId."
