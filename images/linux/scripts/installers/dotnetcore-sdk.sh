@@ -42,19 +42,21 @@ for latest_package in ${LATEST_DOTNET_PACKAGES[@]}; do
     fi
 done
 
+sortedSdks=()
 # Get list of all released SDKs from channels which are not end-of-life or preview
-sdks=()
 for version in ${versions[@]}; do
+    sdks=()
     release_url="https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/${version}/releases.json"
     echo "${release_url}"
     releases=$(curl "${release_url}")
     sdks=("${sdks[@]}" $(echo "${releases}" | jq '.releases[]' | jq '.sdk.version'))
-    sdks=("${sdks[@]}" $(echo "${releases}" | jq '.releases[]' | jq '.sdks[]?' | jq '.version'))
+    sdks=("${sdks[@]}" $(echo "${releases}" | jq '.releases[]' | jq '.sdks[]?' | jq '.version ' ))
+    lastsdk=$(echo ${sdks[@]} | tr ' ' '\n' | grep -v preview | grep -v rc | grep -v display | cut -d\" -f2 | sort -u -r | head -n 1)
+    sortedSdks=("${sortedSdks[@]}" $(echo ${lastsdk}))
 done
 
-sortedSdks=$(echo ${sdks[@]} | tr ' ' '\n' | grep -v preview | grep -v rc | grep -v display | cut -d\" -f2 | sort -u -r)
-
-for sdk in $sortedSdks; do
+echo ${sortedSdks[@]}
+for sdk in ${sortedSdks[@]}; do
     url="https://dotnetcli.blob.core.windows.net/dotnet/Sdk/$sdk/dotnet-sdk-$sdk-linux-x64.tar.gz"
     echo "$url" >> urls
     echo "Adding $url to list to download later"
@@ -63,6 +65,7 @@ done
 # Download additional SDKs
 echo "Downloading release tarballs..."
 cat urls | xargs -n 1 -P 16 wget -q
+
 for tarball in *.tar.gz; do
     dest="./tmp-$(basename -s .tar.gz $tarball)"
     echo "Extracting $tarball to $dest"
