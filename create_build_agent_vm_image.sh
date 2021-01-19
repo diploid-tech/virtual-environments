@@ -24,8 +24,8 @@ declare shared_image_gallery_name="avanti_images"
 declare shared_image_definition="virtual-environment-ubuntu1804"
 declare publisher="DiploidTech"
 declare offer="AvantiVirtualEnvBuildAgent"
-declare sku="2020R1"
-declare debug="true"
+declare sku="2021R1"
+declare debug="false"
 declare azAppPassword=""
 declare azAppId=""
 
@@ -33,7 +33,7 @@ cat banner.txt
 show_header "Create DevOps Agent / GitHub Actions VM Image"
 
 # Initialize parameters specified from command line
-while getopts ":t:l:" arg; do
+while getopts ":t:l:d:r:i:" arg; do
 	case "${arg}" in
         l)
 			location=${OPTARG}
@@ -41,6 +41,14 @@ while getopts ":t:l:" arg; do
         t)
             github_feed_token=${OPTARG}
             ;;
+        d)
+            debug="true"
+            ;;
+        r)
+            resource_group_name="avanti-tenant-${OPTARG}"
+            ;;
+        i)
+            shared_image_gallery_name=${OPTARG}
 		esac
 done
 shift $((OPTIND-1))
