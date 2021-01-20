@@ -185,6 +185,7 @@
                 "{{template_dir}}/scripts/installers/kubernetes-tools.sh",
                 "{{template_dir}}/scripts/installers/nvm.sh",
                 "{{template_dir}}/scripts/installers/nodejs.sh",
+                "{{template_dir}}/scripts/installers/postgresql.sh",
                 "{{template_dir}}/scripts/installers/powershellcore.sh",
                 "{{template_dir}}/scripts/installers/ruby.sh",
                 "{{template_dir}}/scripts/installers/terraform.sh",

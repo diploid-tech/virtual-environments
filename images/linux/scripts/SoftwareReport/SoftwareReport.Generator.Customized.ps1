@@ -200,12 +200,12 @@ $markdown += New-MDList -Style Unordered -Lines @(
     (Get-AzModuleVersions)
 )
 
-# $markdown += New-MDHeader "Databases" -Level 3
-# $markdown += New-MDList -Style Unordered -Lines @(
-#     (Get-PostgreSqlVersion),
-#     (Get-MongoDbVersion),
-#     (Get-SqliteVersion)
-# )
+$markdown += New-MDHeader "Databases" -Level 3
+$markdown += New-MDList -Style Unordered -Lines @(
+    (Get-PostgreSqlVersion)
+    #(Get-MongoDbVersion),
+    #(Get-SqliteVersion)
+)
 
 # $markdown += Build-MySQLSection
 # $markdown += Build-MSSQLToolsSection
