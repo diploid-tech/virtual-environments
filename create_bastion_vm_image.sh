@@ -8,6 +8,7 @@ IFS=$'\n\t'
 
 usage() { echo "Usage: $0
     -l <location>
+    -p <install_password>
 	" 1>&2; exit 1; }
 
 show_header() { echo "
@@ -21,19 +22,20 @@ declare github_feed_token=""
 declare resource_group_name="avanti-platform-global"
 declare service_principal_name="packer"
 declare shared_image_gallery_name="avanti_images"
-declare shared_image_definition="virtual-environment-ubuntu1804"
+declare shared_image_definition="bastion-windows2019"
 declare publisher="DiploidTech"
-declare offer="AvantiVirtualEnvBuildAgent"
+declare offer="AvantiVirtualEnvBastion"
 declare sku="2021R1"
 declare debug="false"
 declare azAppPassword=""
 declare azAppId=""
+declare install_password=""
 
 cat banner.txt
-show_header "Create DevOps Agent / GitHub Actions VM Image"
+show_header "Create Windows 2019 Bastion VM Image"
 
 # Initialize parameters specified from command line
-while getopts ":t:l:d:r:i:" arg; do
+while getopts ":t:l:d:r:i:p:" arg; do
 	case "${arg}" in
         l)
 			location=${OPTARG}
@@ -49,11 +51,14 @@ while getopts ":t:l:d:r:i:" arg; do
             ;;
         i)
             shared_image_gallery_name=${OPTARG}
+            ;;
+        p)
+            install_password=${OPTARG}
 		esac
 done
 shift $((OPTIND-1))
 
-if [ -z "$location" ]; then
+if [ -z "$location" ] || [ -z "$install_password" ]; then
 	echo "Not all parameters are filled!"
 	usage
 fi
@@ -118,7 +123,7 @@ if [ "$( echo ${image_definition} | jq '. | length' )" == 0 ] || [ -z "$image_de
         --publisher $publisher \
         --offer $offer \
         --sku $sku \
-        --os-type Linux
+        --os-type Windows
 else
 	echo "Already created image definition '$image_definition'..."
 fi
@@ -141,7 +146,8 @@ echo "Generate image using Packer"
         -var gallery_name=$shared_image_gallery_name \
         -var managed_image_name=$shared_image_definition \
         -var github_feed_token=$github_feed_token \
-        /tmp/images/linux/ubuntu1804_buildagent.json
+        -var install_password=$install_password \
+        /tmp/images/win/windows2019_bastion.json
 )
 
 echo "Deleting Azure service principal with id $azAppId."
